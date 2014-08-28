@@ -1,13 +1,12 @@
-package main
+/*
+	A very esay short url package.
+*/
+package shorturl
 
 import (
 	"crypto/md5"
 	"fmt"
-	"math/rand"
-	"net/http"
-	"runtime"
 	"strconv"
-	"time"
 )
 
 var chars = [...]string{
@@ -18,8 +17,10 @@ var chars = [...]string{
 	"H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
 	"S", "T", "U", "V", "W", "X", "Y", "Z"}
 
-func Shorter(data string) string {
-	md5_hex := md5.Sum([]byte(data))
+// Normally, one url can have 4 short urls.
+// So, idx meanings which one you need(0-3).
+func New(url string, idx int) string {
+	md5_hex := md5.Sum([]byte(url))
 	md5_hash := fmt.Sprintf("%x", md5_hex)
 	subLen := len(md5_hash) / 8
 	var shortStr [4]string
@@ -35,19 +36,5 @@ func Shorter(data string) string {
 		}
 		shortStr[i] = tmpStr
 	}
-	rand.Seed(time.Now().Unix())
-	return shortStr[rand.Intn(4)]
-}
-
-func EncodeHandler(w http.ResponseWriter, r *http.Request) {
-	url := r.PostFormValue("url")
-	if url != "" {
-		w.Write([]byte(Shorter(url)))
-	}
-}
-
-func main() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
-	http.HandleFunc("/", EncodeHandler)
-	http.ListenAndServe(":8001", nil)
+	return shortStr[idx]
 }
