@@ -23,7 +23,7 @@ func New(url string, idx int) string {
 	md5_hex := md5.Sum([]byte(url))
 	md5_hash := fmt.Sprintf("%x", md5_hex)
 	var shortStr [4]string
-	for i := 0; i < 4; i++ {
+	for i := 0; i <= idx; i++ {
 		tmpStr := ""
 		subStr := md5_hash[i*8 : (i+1)*8]
 		x, _ := strconv.ParseInt(subStr, 16, 0)
