@@ -19,21 +19,17 @@ var chars = [...]string{
 
 // Normally, one url can have 4 short urls.
 // So, idx meanings which one you need(0-3).
-func New(url string, idx int) string {
+func New(url string, idx int) (shortStr string) {
 	md5_hex := md5.Sum([]byte(url))
 	md5_hash := fmt.Sprintf("%x", md5_hex)
-	var shortStr [4]string
-	for i := 0; i <= idx; i++ {
-		tmpStr := ""
-		subStr := md5_hash[i*8 : (i+1)*8]
-		x, _ := strconv.ParseInt(subStr, 16, 0)
-		x = x & 0x3fffffff
-		for k := 0; k < 6; k++ {
-			index := 0x0000003d & x
-			tmpStr += chars[index]
-			x = x >> 5
-		}
-		shortStr[i] = tmpStr
+	shortStr = ""
+	subStr := md5_hash[idx*8 : (idx+1)*8]
+	x, _ := strconv.ParseInt(subStr, 16, 0)
+	x = x & 0x3fffffff
+	for k := 0; k < 6; k++ {
+		index := 0x0000003d & x
+		shortStr += chars[index]
+		x = x >> 5
 	}
-	return shortStr[idx]
+	return
 }
