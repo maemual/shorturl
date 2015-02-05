@@ -5,7 +5,7 @@ package shorturl
 
 import (
 	"crypto/md5"
-	"fmt"
+	"encoding/hex"
 	"strconv"
 )
 
@@ -21,7 +21,7 @@ var chars = [...]string{
 // So, idx meanings which one you need(0-3).
 func New(url string, idx int) (shortStr string) {
 	md5_hex := md5.Sum([]byte(url))
-	md5_hash := fmt.Sprintf("%x", md5_hex)
+	md5_hash := hex.EncodeToString(md5_hex[:])
 	shortStr = ""
 	subStr := md5_hash[idx*8 : (idx+1)*8]
 	x, _ := strconv.ParseInt(subStr, 16, 0)
