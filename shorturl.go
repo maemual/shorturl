@@ -1,5 +1,5 @@
 /*
-	A very esay short url package.
+Package shorturl is a very esay short url package.
 */
 package shorturl
 
@@ -17,13 +17,14 @@ var chars = [...]string{
 	"H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
 	"S", "T", "U", "V", "W", "X", "Y", "Z"}
 
+// New can create a short url.
 // Normally, one url can have 4 short urls.
 // So, idx meanings which one you need(0-3).
 func New(url string, idx int) (shortStr string) {
-	md5_hex := md5.Sum([]byte(url))
-	md5_hash := hex.EncodeToString(md5_hex[:])
+	md5Hex := md5.Sum([]byte(url))
+	md5Hash := hex.EncodeToString(md5Hex[:])
 	shortStr = ""
-	subStr := md5_hash[idx*8 : (idx+1)*8]
+	subStr := md5Hash[idx*8 : (idx+1)*8]
 	x, _ := strconv.ParseInt(subStr, 16, 0)
 	x = x & 0x3fffffff
 	for k := 0; k < 6; k++ {
